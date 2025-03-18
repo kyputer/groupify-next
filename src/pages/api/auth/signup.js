@@ -1,24 +1,22 @@
-import { users } from '../../../db/users'; // Adjust the import path as needed
+import { registerUser } from "../../../utils/auth"; // Adjust the import path as needed
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    console.log('Signup request received');
+  if (req.method === "POST") {
+    console.log("Signup request received");
     console.log(req.body);
 
     try {
-      const user = await users.register(req.body.username, req.body.password);
-      req.logIn(user, (err) => {
-        if (err) {
-          console.error('Error during login after signup:', err);
-          return res.status(500).json({ error: 'Login after signup failed' });
-        }
-        res.status(200).json({ message: 'Signup and login successful', user });
-      });
+      const user = await registerUser(req.body.username, req.body.password);
+      if (!user) {
+        console.error("Signup failed: User already exists");
+        return res.status(400).json({ error: "User already exists" });
+      }
+      res.redirect("/api/auth/signin");
     } catch (err) {
-      console.error('Error during signup:', err);
-      res.status(500).json({ error: 'Signup failed' });
+      console.error("Error during signup:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: "Method not allowed" });
   }
 }

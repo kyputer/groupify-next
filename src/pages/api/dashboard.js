@@ -1,5 +1,6 @@
-import { tracks } from '../../db/tracks'; // Adjust the import path as needed
-import SpotifyWebApi from 'spotify-web-api-node';
+import { getSession } from "next-auth/react";
+import { tracks } from "../../db/tracks"; // Adjust the import path as needed
+import SpotifyWebApi from "spotify-web-api-node";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -8,25 +9,30 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    console.log('Loading dashboard');
+  if (req.method === "GET") {
+    const session = await getSession({ req });
+    if (!session) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    console.log("Loading dashboard");
     try {
       const rows = await tracks.getHot();
-      console.log('Hot tracks retrieved:', rows);
+      console.log("Hot tracks retrieved:", rows);
 
       const ids = rows.map((row) => row.SpotifyID);
       if (ids.length === 0) {
-        console.log('No hot tracks found');
-        return res.status(200).json({ HotJson: [], PlayedJson: [], UserID: req.user?.id });
+        console.log("No hot tracks found");
+        return res.status(200).json({ HotJson: [], PlayedJson: [], UserID: session.user.id });
       }
 
       const data = await spotifyApi.getTracks(ids);
-      res.status(200).json({ HotJson: data.body.tracks, PlayedJson: [], UserID: req.user?.id });
+      res.status(200).json({ HotJson: data.body.tracks, PlayedJson: [], UserID: session.user.id });
     } catch (err) {
-      console.error('Error retrieving dashboard data:', err);
-      res.status(500).json({ error: 'Failed to load dashboard' });
+      console.error("Error retrieving dashboard data:", err);
+      res.status(500).json({ error: "Failed to load dashboard" });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: "Method not allowed" });
   }
 }
