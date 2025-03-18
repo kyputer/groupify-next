@@ -2,7 +2,14 @@
 A crowdsourced, crowdcurated DJ!
 
 ## Setup
-1. Configure the `.env` file with database and Spotify credentials.
+1. Configure the `.env.local` file with Spotify credentials:
+   ```
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   SPOTIFY_REDIRECT_URI=http://localhost:3000/api/auth/spotify
+   NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_spotify_client_id
+   NEXT_PUBLIC_SPOTIFY_REDIRECT_URI=http://localhost:3000/api/auth/spotify
+   ```
 2. Install dependencies:
    ```bash
    npm install
