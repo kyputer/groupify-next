@@ -1,3 +1,17 @@
+# Groupify-Next
+A crowdsourced, crowdcurated DJ!
+
+## Setup
+1. Configure the `.env` file with database and Spotify credentials.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
