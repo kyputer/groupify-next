@@ -1,4 +1,4 @@
-import { registerUser } from "../../../utils/auth"; // Adjust the import path as needed
+import { registerUser } from '../../utils/auth'; // Corrected path
 
 export default async function handler(req, res) {
   if (req.method === "POST") {

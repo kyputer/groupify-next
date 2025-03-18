@@ -1,5 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-import { users } from '../../../db/users'; // Adjust the import path as needed
+import { users } from '../../db/users'; // Corrected path
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
